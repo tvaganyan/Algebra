@@ -10,6 +10,7 @@ public interface Field {
     void deg(Field x, int n);
     boolean isO();
     Field getNewO();
+    Field getNewE();
     Field copy();
     boolean equals(Field f);
 }

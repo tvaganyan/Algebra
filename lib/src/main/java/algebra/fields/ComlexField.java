@@ -56,6 +56,11 @@ public class ComlexField implements Field{
     }
 
     @Override
+    public Field getNewE() {
+        return new ComlexField(1,0);
+    }
+
+    @Override
     public Field copy() {
         return new ComlexField(el.getReal(), el.getImaginary());
     }

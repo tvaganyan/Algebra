@@ -56,6 +56,11 @@ public class Real implements Field {
     }
 
     @Override
+    public Field getNewE() {
+        return new Real(1);
+    }
+
+    @Override
     public Field copy() {
         return new Real(el);
     }

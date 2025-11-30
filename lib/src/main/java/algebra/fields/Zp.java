@@ -70,6 +70,11 @@ public class Zp implements Field{
     }
 
     @Override
+    public Field getNewE() {
+        return new Zp(p,1);
+    }
+
+    @Override
     public Field copy() {
         return new Zp(p, el);
     }

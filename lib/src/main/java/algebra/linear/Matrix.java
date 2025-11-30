@@ -8,6 +8,7 @@ import java.util.Arrays;
 public class Matrix {
     private int dim;
     private Field[][] m;
+    Field f;
 
 
     public Matrix(Field[][] m) {
@@ -18,6 +19,7 @@ public class Matrix {
                 this.m[i][j] = m[i][j].copy();
             }
         }
+        f = m[0][0].getNewO();
     }
 
     public void o(){
@@ -58,12 +60,13 @@ public class Matrix {
     public void mul(Matrix x, Matrix y){
         for(int i = 0; i < dim; i++){
             for(int j = 0; j < dim; j++) {
-                m[i][j].o();
-                Field f = m[i][j].getNewO();
+                Field s = f.getNewO();
+                Field g = f.getNewO();
                 for(int k = 0; k < dim; k++) {
-                    f.mul(x.m[i][k], y.m[k][j]);
-                    m[i][j].sum(m[i][j],f);
+                    g.mul(x.m[i][k], y.m[k][j]);
+                    s.sum(s,g);
                 }
+                m[i][j] = s;
             }
         }
     }
@@ -118,14 +121,14 @@ public class Matrix {
     public Field det(){
         if(dim == 1)
             return m[0][0];
-        Field res = m[0][0].getNewO();
-        Field f = m[0][0].getNewO();
+        Field res = f.getNewO();
+        Field g = f.getNewO();
         for(int i = 0; i < dim; i++){
-            f.mul(m[0][i], minor(0,i).det());
+            g.mul(m[0][i], minor(0,i).det());
             if(i % 2 == 0)
-                res.sum(res,f);
+                res.sum(res,g);
             else
-                res.dif(res,f);
+                res.dif(res,g);
         }
         return res;
     }
@@ -140,14 +143,13 @@ public class Matrix {
     }
 
     public boolean equals(Matrix x){
-        boolean res = true;
         for(int i = 0; i < dim; i++){
             for(int j = 0; j < dim; j++) {
                 if (!m[i][j].equals(x.m[i][j]))
                     return false;
             }
         }
-        return res;
+        return true;
     }
 
     public int getDim() {
@@ -172,26 +174,5 @@ public class Matrix {
             res += "] \n";
         }
         return res;
-    }
-
-    public static void main(String[] s){
-        Field[] v = new Field[2];
-        Field[][] m = new Field[2][2];
-        v[0] = new Real(5);
-        v[1] = new Real(1);
-        m[0][0] = new Real(1);
-        m[0][1] = new Real(1);
-        m[1][0] = new Real(2);
-        m[1][1] = new Real(-1);
-        Vector a = new Vector(v);
-        Matrix A = new Matrix(m);
-        Vector x = A.linearEquationSolution(a); //2,3
-        Matrix B = new Matrix(m);
-        B.inverse(A);
-        System.out.println("A: " + A);
-        System.out.println("a: " + a);
-        System.out.println("det: " + A.det());
-        System.out.println("x: " + x);
-        System.out.println("B: " + B);
     }
 }

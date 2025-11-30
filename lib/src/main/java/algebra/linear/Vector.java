@@ -51,12 +51,11 @@ public class Vector {
     }
 
     public boolean equals(Vector x){
-        boolean res = true;
         for(int i = 0; i < dim; i++){
             if(!v[i].equals(x.v[i]))
                 return false;
         }
-        return res;
+        return true;
     }
 
     public int getDim() {
@@ -74,14 +73,5 @@ public class Vector {
     @Override
     public String toString() {
         return Arrays.toString(v);
-    }
-
-    public static void main(String[] s){
-        Field[] v = new Field[2];
-        for(int i = 0; i < 2; i++){
-            v[i] = new Real(2+i);
-        }
-        Vector a = new Vector(v);
-        System.out.println(a);
     }
 }
