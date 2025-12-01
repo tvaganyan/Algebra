@@ -1,48 +1,54 @@
 package algebra;
-import algebra.fields.ComlexField;
-import algebra.fields.Field;
-import algebra.fields.Real;
-import algebra.fields.Zp;
+import algebra.fields.*;
 import org.apache.commons.math3.complex.Complex;
 import org.junit.Assert;
 import org.junit.Test;
 
 public class FieldTest {
+    FieldFabric fc;
 
     @Test public void realOp(){
-        Field x = new Real(3);
-        Field y = new Real(5);
-        Field r = new Real(0);
+        fc = new FieldFabric(0, FieldEnum.REAL);
+        
+        Field x = fc.Real(3);
+        Field y = fc.Real(5);
+        Field r = fc.Real(0);
+        
         r.sum(x,y);
-        Assert.assertTrue(r.equals(new Real(8)));
+        Assert.assertTrue(r.equals(fc.Real(8)));
         r.dif(x,y);
-        Assert.assertTrue(r.equals(new Real(-2)));
+        Assert.assertTrue(r.equals(fc.Real(-2)));
         r.mul(x,y);
-        Assert.assertTrue(r.equals(new Real(15)));
+        Assert.assertTrue(r.equals(fc.Real(15)));
     }
 
     @Test public void complexOp(){
-        Field x = new ComlexField(1,3);
-        Field y = new ComlexField(2,5);
-        Field r = new ComlexField(0,0);
+        fc = new FieldFabric(0, FieldEnum.COMPLEX);
+        
+        Field x = fc.Complex(1,3);
+        Field y = fc.Complex(2,5);
+        Field r = fc.Complex(0,0);
+        
         r.sum(x,y);
-        Assert.assertTrue(r.equals(new ComlexField(3,8)));
+        Assert.assertTrue(r.equals(fc.Complex(3,8)));
         r.dif(x,y);
-        Assert.assertTrue(r.equals(new ComlexField(-1,-2)));
+        Assert.assertTrue(r.equals(fc.Complex(-1,-2)));
         r.mul(x,y);
-        Assert.assertTrue(r.equals(new ComlexField(-13,11)));
+        Assert.assertTrue(r.equals(fc.Complex(-13,11)));
     }
 
     @Test public void ZpOp(){
-        int p = 7;
-        Field x = new Zp(p,3);
-        Field y = new Zp(p,5);
-        Field r = new Zp(p,0);
+        fc = new FieldFabric(7, FieldEnum.COMPLEX);
+
+        Field x = fc.Zp(3);
+        Field y = fc.Zp(5);
+        Field r = fc.Zp(0);
+
         r.sum(x,y);
-        Assert.assertTrue(r.equals(new Zp(p,1)));
+        Assert.assertTrue(r.equals(fc.Zp(1)));
         r.dif(x,y);
-        Assert.assertTrue(r.equals(new Zp(p,5)));
+        Assert.assertTrue(r.equals(fc.Zp(5)));
         r.mul(x,y);
-        Assert.assertTrue(r.equals(new Zp(p,1)));
+        Assert.assertTrue(r.equals(fc.Zp(1)));
     }
 }

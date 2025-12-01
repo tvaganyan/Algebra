@@ -1,6 +1,8 @@
 package algebra;
 
 import algebra.fields.Field;
+import algebra.fields.FieldEnum;
+import algebra.fields.FieldFabric;
 import algebra.fields.Real;
 import algebra.linear.Matrix;
 import algebra.linear.Vector;
@@ -8,21 +10,23 @@ import org.junit.Assert;
 import org.junit.Test;
 
 public class MatrixTest {
+
+    FieldFabric fc = new FieldFabric(0, FieldEnum.REAL);
     Field[] v = new Field[2];
     Field[][] m = new Field[2][2];
 
     void init(){
-        v[0] = new Real(3);
-        v[1] = new Real(2);
-        m[0][0] = new Real(2);
-        m[0][1] = new Real(5);
-        m[1][0] = new Real(1);
-        m[1][1] = new Real(3);
+        v[0] = fc.Real(3);
+        v[1] = fc.Real(2);
+        m[0][0] = fc.Real(2);
+        m[0][1] = fc.Real(5);
+        m[1][0] = fc.Real(1);
+        m[1][1] = fc.Real(3);
     }
 
     @Test public void matrixRealOp(){
         init();
-        Matrix A = new Matrix(m);
+        Matrix A = new Matrix(m, fc);
         Field det = A.det();
         Assert.assertTrue(det.equals(new Real(1)));
 
@@ -33,10 +37,10 @@ public class MatrixTest {
         r[1] = new Real(1);
         Assert.assertTrue(x.equals(new Vector(r)));
 
-        Matrix I = new Matrix(m);
+        Matrix I = new Matrix(m, fc);
         I.inverse(A);
 
-        Matrix E = new Matrix(m);
+        Matrix E = new Matrix(m, fc);
         E.mul(I, A);
         I.e();
 

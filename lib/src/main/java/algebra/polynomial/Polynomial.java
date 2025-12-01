@@ -1,6 +1,7 @@
 package algebra.polynomial;
 
 import algebra.fields.Field;
+import algebra.fields.FieldFabric;
 import algebra.linear.Matrix;
 import algebra.linear.Vector;
 
@@ -8,14 +9,13 @@ import java.util.*;
 
 public class Polynomial {
     public Map<Integer, Field> map;
-    private Field f;
+    FieldFabric fc;
 
-    public Polynomial(Map<Integer,Field> map){
+    public Polynomial(Map<Integer,Field> map, FieldFabric fc){
+        this.fc = fc;
         this.map = new TreeMap<>();
         for(int i :map.keySet()) {
             this.map.put(i, map.get(i).copy());
-            if(f == null)
-                f = map.get(i).getNewO();
         }
     }
 
@@ -31,17 +31,17 @@ public class Polynomial {
 
     public void o(){
        map.clear();
-       map.put(0, f.getNewO());
+       map.put(0, fc.get0());
     }
 
     public void e(){
         map.clear();
-        map.put(0, f.getNewE());
+        map.put(0, fc.get1());
     }
 
     public void sum(Polynomial x, Polynomial y){
         map.clear();
-        Field g = f.getNewO();
+        Field g = fc.get0();
         Set<Integer> keys = new HashSet<>(x.map.keySet());
         keys.addAll(y.map.keySet());
         for(int i :keys) {
@@ -62,16 +62,15 @@ public class Polynomial {
     public void scalarMul(Field s, Polynomial x){
         map.clear();
         for(int i :x.map.keySet()){
-            Field g = f.getNewO();
+            Field g = fc.get0();
             g.mul(s, x.map.get(i));
             map.put(i,g);
         }
     }
 
     public void dif(Polynomial x, Polynomial y){
-        Field s = f.getNewO();
-        s.dif(f.getNewO(), f.getNewE()); // -1
-        Polynomial z = new Polynomial(y.map);
+        Field s = fc.getMinus1();
+        Polynomial z = new Polynomial(y.map, fc);
         z.scalarMul(s, y);
         sum(x, z);
     }
@@ -80,10 +79,10 @@ public class Polynomial {
         map.clear();
         int d = x.deg() + y.deg();
         for(int k = 0; k <= d; k++) {
-            Field s = f.getNewO();
+            Field s = fc.get0();
             for (int i : x.map.keySet()) {
                 if(y.map.keySet().contains(k-i)){
-                    Field m = f.getNewO();
+                    Field m = fc.get0();
                     m.mul(x.map.get(i),y.map.get(k-i));
                     s.sum(s,m);
                 }
@@ -93,13 +92,15 @@ public class Polynomial {
         removeO();
     }
 
-    private void removeO(){
+    public void removeO(){
         Iterator<Integer> it = map.keySet().iterator();
         while (it.hasNext()) {
             Integer k = it.next();
             if(map.get(k).isO())
                 it.remove();
         }
+        if(map.keySet().isEmpty())
+            map.put(0, fc.get0());
     }
 
     public boolean equals(Polynomial x){
@@ -110,6 +111,16 @@ public class Polynomial {
                 return false;
         }
         return true;
+    }
+
+    public Polynomial getNewO(){
+        Map<Integer, Field> m = new TreeMap<>();
+        m.put(0, fc.get0());
+        return new Polynomial(m, fc);
+    }
+
+    public Polynomial copy(){
+        return new Polynomial(map, fc);
     }
 
     public String toString(){

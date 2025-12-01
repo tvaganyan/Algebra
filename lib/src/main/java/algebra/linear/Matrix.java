@@ -1,17 +1,16 @@
 package algebra.linear;
 
 import algebra.fields.Field;
-import algebra.fields.Real;
-
-import java.util.Arrays;
+import algebra.fields.FieldFabric;
 
 public class Matrix {
     private int dim;
     private Field[][] m;
-    Field f;
+    FieldFabric fc;
 
 
-    public Matrix(Field[][] m) {
+    public Matrix(Field[][] m, FieldFabric fc) {
+        this.fc = fc;
         dim = m[0].length;
         this.m = new Field[dim][dim];
         for(int i = 0; i < dim; i++){
@@ -19,7 +18,6 @@ public class Matrix {
                 this.m[i][j] = m[i][j].copy();
             }
         }
-        f = m[0][0].getNewO();
     }
 
     public void o(){
@@ -60,8 +58,8 @@ public class Matrix {
     public void mul(Matrix x, Matrix y){
         for(int i = 0; i < dim; i++){
             for(int j = 0; j < dim; j++) {
-                Field s = f.getNewO();
-                Field g = f.getNewO();
+                Field s = fc.get0();
+                Field g = fc.get0();
                 for(int k = 0; k < dim; k++) {
                     g.mul(x.m[i][k], y.m[k][j]);
                     s.sum(s,g);
@@ -107,11 +105,11 @@ public class Matrix {
                 }
             }
         }
-        return new Matrix(m1);
+        return new Matrix(m1, fc);
     }
 
     private Matrix columnReplacement(int j, Vector a){
-        Matrix res = new Matrix(m);
+        Matrix res = new Matrix(m, fc);
         for(int i = 0; i < dim; i++){
             res.m[i][j] = a.getV()[i];
         }
@@ -121,9 +119,9 @@ public class Matrix {
     public Field det(){
         if(dim == 1)
             return m[0][0];
-        Field res = f.getNewO();
-        Field g = f.getNewO();
+        Field res = fc.get0();
         for(int i = 0; i < dim; i++){
+            Field g = fc.get0();
             g.mul(m[0][i], minor(0,i).det());
             if(i % 2 == 0)
                 res.sum(res,g);
