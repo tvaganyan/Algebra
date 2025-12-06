@@ -39,6 +39,6 @@ public class CharacteristicPolinomialTest {
         map.put(1,fc.Real(18));
         map.put(2,fc.Real(3));
         map.put(3,fc.Real(-1));
-        Assert.assertTrue(p.equals(new Polynomial(map, fc)));
+        Assert.assertTrue(p.eq(new Polynomial(map, fc)));
     }
 }
