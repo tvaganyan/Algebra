@@ -47,7 +47,7 @@ public class Real implements Field {
 
     @Override
     public boolean isO() {
-        return (Math.abs(el) < 1e-12);
+        return (Math.abs(el) < 1e-9);
     }
 
     @Override
@@ -66,16 +66,18 @@ public class Real implements Field {
     }
 
     @Override
-    public boolean equals(Field f) {
-        return (el == ((Real)f).el);
+    public boolean eq(Field f) {
+        System.out.println();
+        return (Math.abs(el - ((Real)f).el) < 1e-9);
+    }
+
+    @Override
+    public FieldEnum getType() {
+        return FieldEnum.REAL;
     }
 
     public double getEl() {
         return el;
-    }
-
-    public void setEl(double el) {
-        this.el = el;
     }
 
     @Override

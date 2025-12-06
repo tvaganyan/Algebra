@@ -1,9 +1,7 @@
 package algebra.polynomial;
 
-import algebra.fields.Field;
-import algebra.fields.FieldFabric;
-import algebra.linear.Matrix;
-import algebra.linear.Vector;
+import algebra.fields.*;
+import org.apache.commons.math3.complex.Complex;
 
 import java.util.*;
 
@@ -92,6 +90,17 @@ public class Polynomial {
         removeO();
     }
 
+    public Field eval(Field x){
+        Field res = fc.get0();
+        for(int i :map.keySet()){
+            Field f = fc.get1();
+            f.deg(x.copy(),i);
+            f.mul(map.get(i),f);
+            res.sum(res,f);
+        }
+        return res;
+    }
+
     public void removeO(){
         Iterator<Integer> it = map.keySet().iterator();
         while (it.hasNext()) {
@@ -103,14 +112,113 @@ public class Polynomial {
             map.put(0, fc.get0());
     }
 
-    public boolean equals(Polynomial x){
+    public boolean eq(Polynomial x){
         if(!map.keySet().equals(x.map.keySet()))
             return false;
         for (int i : map.keySet()) {
-            if(!map.get(i).equals(x.map.get(i)))
+            if(!map.get(i).eq(x.map.get(i)))
                 return false;
         }
         return true;
+    }
+
+    public List<Field> roots(){
+        //  the degree of the polynomial must be equal to 1, 2 or 3
+        int d = deg();
+        if(d < 1 || d > 3)
+            return null;
+        List<Field> res = new ArrayList<>();
+
+        if(fc.getType() == FieldEnum.ZP){
+            int p = fc.getP();
+            for(int i = 0; i < p; i++){
+                if(eval(fc.Zp(i)).isO())
+                    res.add(fc.Zp(i));
+            }
+            return res;
+        }
+
+        // if all roots are REAL, returns the results type REAL else returns COMPLEX
+
+        if(d == 1){
+            Field z = fc.get0();
+            z.div(map.get(0), map.get(1));
+            z.mul(fc.getMinus1(), z);
+            res.add(z);
+            return res;
+        }
+        if(d == 2){
+            Complex z = null, c = null;
+            if(fc.getType() == FieldEnum.REAL){
+                double a2 = ((Real)map.get(2)).getEl();
+                double a = ((Real)map.get(1)).getEl()/a2/2;
+                double b = ((Real)map.get(0)).getEl()/a2;
+                z = new Complex((a * a - b - 2) / 2);
+                c = new Complex(a);
+            }
+            if(fc.getType() == FieldEnum.COMPLEX){
+                Complex a2 = ((ComplexField)map.get(2)).getEl();
+                Complex a = ((ComplexField)map.get(1)).getEl().divide(a2).divide(2);
+                Complex b = ((ComplexField)map.get(0)).getEl().divide(a2);
+                z = a.multiply(a).subtract(b).subtract(2).divide(2);
+                c = a;
+            }
+            Complex r = z.multiply(z).subtract(1).sqrt().add(z).log().divide(2);
+            Complex z1 = r.cosh().multiply(2).subtract(c);
+            Complex z2 = r.cosh().multiply(-2).subtract(c);
+            if(Math.abs(z1.getImaginary()) < 1e-9 && Math.abs(z2.getImaginary()) < 1e-9){
+                res.add(fc.Real(z1.getReal()));
+                res.add(fc.Real(z2.getReal()));
+                return res;
+            }
+            res.add(fc.Complex(z1));
+            res.add(fc.Complex(z2));
+            return res;
+        }
+
+        if(d == 3){
+            Complex z = Complex.ZERO, a = Complex.ZERO;
+            if(fc.getType() == FieldEnum.REAL){
+                double a3 = ((Real)map.get(3)).getEl();
+                double a2 = ((Real)map.get(2)).getEl();
+                double a1 = ((Real)map.get(1)).getEl();
+                double a0 = ((Real)map.get(0)).getEl();
+                double p = (a2*a2/(3*a3*a3)-a1/a3)/3;
+                double q = -a0/a3+a2*a1/(3*a3*a3)-2*a2*a2*a2/(27*a3*a3*a3);
+                a = (new Complex(p)).sqrt();
+                z = new Complex(q/2).divide(a.pow(3));
+            }
+            if(fc.getType() == FieldEnum.COMPLEX){
+                Complex a3 = ((ComplexField)map.get(3)).getEl();
+                Complex a2 = ((ComplexField)map.get(2)).getEl();
+                Complex a1 = ((ComplexField)map.get(1)).getEl();
+                Complex a0 = ((ComplexField)map.get(0)).getEl();
+                Complex p = a2.multiply(a2).divide(a3.multiply(a3).multiply(9))
+                        .subtract(a1.divide(a3).divide(3));
+                Complex q = a1.multiply(a2).divide(a3.multiply(a3).multiply(3))
+                        .subtract(a0.divide(a3))
+                        .subtract(a2.multiply(a2).multiply(a2).multiply(2)
+                                .divide(a3.multiply(a3).multiply(a3).multiply(27)));
+                a = p.sqrt();
+                z = q.divide(a.pow(3).multiply(2));
+            }
+            Complex r = z.multiply(z).subtract(1).sqrt().add(z).log().divide(3);
+            Complex fi = new Complex(0,2*Math.PI/3);
+            Complex z1 = r.cosh().multiply(a).multiply(2);
+            Complex z2 = r.add(fi).cosh().multiply(a).multiply(2);
+            Complex z3 = r.add(fi.multiply(2)).cosh().multiply(a).multiply(2);
+            if(Math.abs(z1.getImaginary()) < 1e-9 && Math.abs(z2.getImaginary()) < 1e-9 && Math.abs(z3.getImaginary()) < 1e-9){
+                res.add(fc.Real(z1.getReal()));
+                res.add(fc.Real(z2.getReal()));
+                res.add(fc.Real(z3.getReal()));
+                return res;
+            }
+            res.add(fc.Complex(z1));
+            res.add(fc.Complex(z2));
+            res.add(fc.Complex(z3));
+            return res;
+        }
+        return res;
     }
 
     public Polynomial getNewO(){

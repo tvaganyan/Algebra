@@ -80,24 +80,21 @@ public class Zp implements Field{
     }
 
     @Override
-    public boolean equals(Field f) {
+    public boolean eq(Field f) {
         return (el == ((Zp)f).el);
+    }
+
+    @Override
+    public FieldEnum getType() {
+        return FieldEnum.ZP;
     }
 
     public int getP() {
         return p;
     }
 
-    public void setP(int p) {
-        this.p = p;
-    }
-
     public int getEl() {
         return el;
-    }
-
-    public void setEl(int el) {
-        this.el = el;
     }
 
     @Override

@@ -140,10 +140,10 @@ public class Matrix {
         return res;
     }
 
-    public boolean equals(Matrix x){
+    public boolean eq(Matrix x){
         for(int i = 0; i < dim; i++){
             for(int j = 0; j < dim; j++) {
-                if (!m[i][j].equals(x.m[i][j]))
+                if (!m[i][j].eq(x.m[i][j]))
                     return false;
             }
         }

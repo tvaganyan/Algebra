@@ -12,5 +12,6 @@ public interface Field {
     Field getNewO();
     Field getNewE();
     Field copy();
-    boolean equals(Field f);
+    boolean eq(Field f);
+    FieldEnum getType();
 }

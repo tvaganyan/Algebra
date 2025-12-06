@@ -50,9 +50,9 @@ public class Vector {
         }
     }
 
-    public boolean equals(Vector x){
+    public boolean eq(Vector x){
         for(int i = 0; i < dim; i++){
-            if(!v[i].equals(x.v[i]))
+            if(!v[i].eq(x.v[i]))
                 return false;
         }
         return true;

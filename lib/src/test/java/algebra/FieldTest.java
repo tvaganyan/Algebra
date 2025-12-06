@@ -15,11 +15,11 @@ public class FieldTest {
         Field r = fc.Real(0);
         
         r.sum(x,y);
-        Assert.assertTrue(r.equals(fc.Real(8)));
+        Assert.assertTrue(r.eq(fc.Real(8)));
         r.dif(x,y);
-        Assert.assertTrue(r.equals(fc.Real(-2)));
+        Assert.assertTrue(r.eq(fc.Real(-2)));
         r.mul(x,y);
-        Assert.assertTrue(r.equals(fc.Real(15)));
+        Assert.assertTrue(r.eq(fc.Real(15)));
     }
 
     @Test public void complexOp(){
@@ -30,11 +30,11 @@ public class FieldTest {
         Field r = fc.Complex(0,0);
         
         r.sum(x,y);
-        Assert.assertTrue(r.equals(fc.Complex(3,8)));
+        Assert.assertTrue(r.eq(fc.Complex(3,8)));
         r.dif(x,y);
-        Assert.assertTrue(r.equals(fc.Complex(-1,-2)));
+        Assert.assertTrue(r.eq(fc.Complex(-1,-2)));
         r.mul(x,y);
-        Assert.assertTrue(r.equals(fc.Complex(-13,11)));
+        Assert.assertTrue(r.eq(fc.Complex(-13,11)));
     }
 
     @Test public void ZpOp(){
@@ -45,10 +45,10 @@ public class FieldTest {
         Field r = fc.Zp(0);
 
         r.sum(x,y);
-        Assert.assertTrue(r.equals(fc.Zp(1)));
+        Assert.assertTrue(r.eq(fc.Zp(1)));
         r.dif(x,y);
-        Assert.assertTrue(r.equals(fc.Zp(5)));
+        Assert.assertTrue(r.eq(fc.Zp(5)));
         r.mul(x,y);
-        Assert.assertTrue(r.equals(fc.Zp(1)));
+        Assert.assertTrue(r.eq(fc.Zp(1)));
     }
 }

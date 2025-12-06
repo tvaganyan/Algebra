@@ -28,14 +28,14 @@ public class MatrixTest {
         init();
         Matrix A = new Matrix(m, fc);
         Field det = A.det();
-        Assert.assertTrue(det.equals(new Real(1)));
+        Assert.assertTrue(det.eq(fc.Real(1)));
 
         Vector a = new Vector(v);
         Vector x = A.linearEquationSolution(a);
         Field[] r = new Field[2];
-        r[0] = new Real(-1);
-        r[1] = new Real(1);
-        Assert.assertTrue(x.equals(new Vector(r)));
+        r[0] = fc.Real(-1);
+        r[1] = fc.Real(1);
+        Assert.assertTrue(x.eq(new Vector(r)));
 
         Matrix I = new Matrix(m, fc);
         I.inverse(A);
@@ -44,6 +44,6 @@ public class MatrixTest {
         E.mul(I, A);
         I.e();
 
-        Assert.assertTrue(E.equals(I));
+        Assert.assertTrue(E.eq(I));
     }
 }
