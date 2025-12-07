@@ -8,9 +8,8 @@ public interface Field {
     void mul(Field x, Field y);
     void div(Field x, Field y);
     void deg(Field x, int n);
+    double norm();
     boolean isO();
-    Field getNewO();
-    Field getNewE();
     Field copy();
     boolean eq(Field f);
     FieldEnum getType();

@@ -46,18 +46,13 @@ public class Real implements Field {
     }
 
     @Override
+    public double norm() {
+        return Math.abs(el);
+    }
+
+    @Override
     public boolean isO() {
         return (Math.abs(el) < 1e-9);
-    }
-
-    @Override
-    public Field getNewO() {
-        return new Real(0);
-    }
-
-    @Override
-    public Field getNewE() {
-        return new Real(1);
     }
 
     @Override

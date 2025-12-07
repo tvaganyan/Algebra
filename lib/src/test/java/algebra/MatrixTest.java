@@ -30,12 +30,12 @@ public class MatrixTest {
         Field det = A.det();
         Assert.assertTrue(det.eq(fc.Real(1)));
 
-        Vector a = new Vector(v);
+        Vector a = new Vector(v,fc);
         Vector x = A.linearEquationSolution(a);
         Field[] r = new Field[2];
         r[0] = fc.Real(-1);
         r[1] = fc.Real(1);
-        Assert.assertTrue(x.eq(new Vector(r)));
+        Assert.assertTrue(x.eq(new Vector(r,fc)));
 
         Matrix I = new Matrix(m, fc);
         I.inverse(A);

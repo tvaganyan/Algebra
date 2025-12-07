@@ -60,18 +60,15 @@ public class Zp implements Field{
     }
 
     @Override
+    public double norm() {
+        if(el == 0)
+            return 0;
+        return 1;
+    }
+
+    @Override
     public boolean isO() {
         return (el == 0);
-    }
-
-    @Override
-    public Field getNewO() {
-        return new Zp(p, 0);
-    }
-
-    @Override
-    public Field getNewE() {
-        return new Zp(p,1);
     }
 
     @Override

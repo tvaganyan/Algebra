@@ -6,7 +6,7 @@ import algebra.fields.FieldFabric;
 public class Matrix {
     private int dim;
     private Field[][] m;
-    FieldFabric fc;
+    private FieldFabric fc;
 
 
     public Matrix(Field[][] m, FieldFabric fc) {
@@ -70,7 +70,7 @@ public class Matrix {
     }
 
     public void inverse(Matrix x){
-        Vector a = new Vector(x.m[0]);
+        Vector a = new Vector(x.m[0], fc);
         for(int i = 0; i < dim; i++){
             a.e(i);
             for (int j = 0; j < dim; j++) {
@@ -131,9 +131,30 @@ public class Matrix {
         return res;
     }
 
+    public Vector homogeneousLinearEquationSolution(){
+        if(!det().isO()){
+            return null;
+        }
+        Field[] v = new Field[dim];
+        for(int i = 0; i < dim; i++){
+            if(i % 2 == 0)
+                v[i] = minor(0, i).det();
+            else
+                v[i].mul(minor(0, i).det(), fc.getMinus1());
+        }
+        Vector res = new Vector(v, fc);
+        res.norming();
+        return res;
+    }
+
     public Vector linearEquationSolution(Vector a){
-        Vector res = new Vector(a.getV());
         Field d = det();
+        if(d.isO()) {
+            if(a.norm() > 1e-9)
+                return null;
+            return homogeneousLinearEquationSolution();
+        }
+        Vector res = new Vector(a.getV(), fc);
         for(int j = 0; j < dim; j++){
             res.getV()[j].div(columnReplacement(j, a).det(), d);
         }

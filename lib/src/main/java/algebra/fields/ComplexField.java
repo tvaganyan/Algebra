@@ -54,18 +54,13 @@ public class ComplexField implements Field{
     }
 
     @Override
+    public double norm() {
+        return el.abs();
+    }
+
+    @Override
     public boolean isO() {
         return el.abs() < 1e-9;
-    }
-
-    @Override
-    public Field getNewO() {
-        return new ComplexField(0,0);
-    }
-
-    @Override
-    public Field getNewE() {
-        return new ComplexField(1,0);
     }
 
     @Override

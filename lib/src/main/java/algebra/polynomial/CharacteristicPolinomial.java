@@ -20,14 +20,13 @@ public class CharacteristicPolinomial {
         dim = m.getDim();
         pmap = new Polynomial[dim][dim];
         Field[][] fm = m.getM();
-        Field ne = fm[0][0].getNewO();
-        ne.dif(ne.getNewO(),ne.getNewE());
+        Field me = this.fc.getMinus1();
         for(int i = 0; i < dim; i++){
             for(int j = 0; j < dim; j++){
                 Map<Integer, Field> map = new TreeMap<>();
                 map.put(0, fm[i][j]);
                 if(i == j){
-                    map.put(1, ne);
+                    map.put(1, me);
                 }
                 pmap[i][j] = new Polynomial(map, fc);
             }

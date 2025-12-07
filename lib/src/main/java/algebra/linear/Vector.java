@@ -1,15 +1,18 @@
 package algebra.linear;
 
 import algebra.fields.Field;
-import algebra.fields.Real;
+import algebra.fields.FieldEnum;
+import algebra.fields.FieldFabric;
 
 import java.util.Arrays;
 
 public class Vector {
     private int dim;
     private Field[] v;
+    private FieldFabric fc;
 
-    public Vector(Field[] v) {
+    public Vector(Field[] v, FieldFabric fc) {
+        this.fc = fc;
         dim = v.length;
         this.v = new Field[dim];
         for(int i = 0; i < dim; i++){
@@ -58,7 +61,31 @@ public class Vector {
         return true;
     }
 
-    public int getDim() {
+    public double norm() {
+        if(fc.getType() == FieldEnum.ZP)
+            return 1;
+        double res = 0;
+        for(Field f: v){
+            res += f.norm() * f.norm();
+        }
+        return Math.sqrt(res);
+    }
+
+    public void norming(){
+        double n = norm();
+        Field nf = null;
+        if(fc.getType() == FieldEnum.ZP)
+            nf = fc.Zp(1);
+        if(fc.getType() == FieldEnum.COMPLEX)
+            nf = fc.Complex(n);
+        if(fc.getType() == FieldEnum.REAL)
+            nf = fc.Real(n);
+        for(int i = 0; i < dim; i++){
+            v[i].div(v[i], nf);
+        }
+    }
+
+    public int getDim(){
         return dim;
     }
 
