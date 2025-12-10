@@ -79,10 +79,10 @@ public class Matrix {
         }
     }
 
-    public void scalarMul(Field s, Matrix x){
+    public void scalarMul(Field s){
         for(int i = 0; i < dim; i++) {
             for (int j = 0; j < dim; j++) {
-                m[i][j].mul(s, x.m[i][j]);
+                m[i][j].mul(s, m[i][j]);
             }
         }
     }
@@ -131,28 +131,27 @@ public class Matrix {
         return res;
     }
 
-    public Vector homogeneousLinearEquationSolution(){
+    public Vector homogeneousLinearEquationSolution(){  // det == 0
         if(!det().isO()){
             return null;
         }
-        Field[] v = new Field[dim];
+
+        Field[] v = new Field[dim];               
         for(int i = 0; i < dim; i++){
+            v[i] = fc.get0();
             if(i % 2 == 0)
                 v[i] = minor(0, i).det();
             else
                 v[i].mul(minor(0, i).det(), fc.getMinus1());
         }
         Vector res = new Vector(v, fc);
-        res.norming();
         return res;
     }
 
-    public Vector linearEquationSolution(Vector a){
+    public Vector linearEquationSolution(Vector a){   // det != 0
         Field d = det();
-        if(d.isO()) {
-            if(a.norm() > 1e-9)
-                return null;
-            return homogeneousLinearEquationSolution();
+        if(d.isO()){
+            return null;
         }
         Vector res = new Vector(a.getV(), fc);
         for(int j = 0; j < dim; j++){

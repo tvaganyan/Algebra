@@ -20,13 +20,13 @@ public class Vector {
         }
     }
 
-    void o(){
+    public void o(){
         for(Field x: v){
             x.o();
         }
     }
 
-    void e(int n){
+    public void e(int n){
         for(int i = 0; i < dim; i++){
             if(i == n)
                 v[i].e();
@@ -35,21 +35,32 @@ public class Vector {
         }
     }
 
-    void sum(Vector x, Vector y){
+    public void sum(Vector x, Vector y){
         for(int i = 0; i < dim; i++){
             v[i].sum(x.v[i], y.v[i]);
         }
     }
 
-    void dif(Vector x, Vector y){
+    public void dif(Vector x, Vector y){
         for(int i = 0; i < dim; i++){
             v[i].dif(x.v[i], y.v[i]);
         }
     }
 
-    void scalarMul(Field s, Vector x){
+    public void scalarMul(Field s){
         for(int i = 0; i < dim; i++){
-            v[i].mul(s, x.v[i]);
+            v[i].mul(s, v[i]);
+        }
+    }
+
+    public void matrixMul(Matrix x, Vector y){
+        for(int i = 0; i < dim; i++){
+            v[i] = fc.get0();
+            for(int j = 0; j < dim; j++){
+                Field s = fc.get1();
+                s.mul(x.getM()[i][j], y.v[j]);
+                v[i].sum(v[i], s);
+            }
         }
     }
 
