@@ -44,10 +44,10 @@ public class MatrixTest {
 
         Assert.assertTrue(b.eq(a));
 
-        Matrix I = new Matrix(m, fc);
+        Matrix I = new Matrix(A.getDim(), fc);
         I.inverse(A);
 
-        Matrix E = new Matrix(m, fc);
+        Matrix E = new Matrix(A.getDim(), fc);
         E.mul(I, A);
         I.e();
         

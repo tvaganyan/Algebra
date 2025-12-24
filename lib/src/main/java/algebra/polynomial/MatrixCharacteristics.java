@@ -1,30 +1,38 @@
 package algebra.polynomial;
 
 import algebra.fields.Field;
+import algebra.fields.FieldEnum;
 import algebra.fields.FieldFabric;
 import algebra.linear.Matrix;
+import algebra.linear.Vector;
 
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class CharacteristicPolinomial {
-
+// Matrix dimension must be equal to 1, 2 or 3
+public class MatrixCharacteristics {
     private int dim;
     private Polynomial[][] pmap;
     private Polynomial p;
 
+    private Matrix m;
+
     FieldFabric fc;
 
-    public CharacteristicPolinomial(Matrix m, FieldFabric fc){
+    public MatrixCharacteristics(Matrix m, FieldFabric fc){
+        if(m.getType() != fc.getType())
+            return;
+
+        this.m = m;
         this.fc = fc;
         dim = m.getDim();
         pmap = new Polynomial[dim][dim];
-        Field[][] fm = m.getM();
         Field me = this.fc.getMinus1();
         for(int i = 0; i < dim; i++){
             for(int j = 0; j < dim; j++){
                 Map<Integer, Field> map = new TreeMap<>();
-                map.put(0, fm[i][j]);
+                map.put(0, m.getM()[i][j].copy());
                 if(i == j){
                     map.put(1, me);
                 }
@@ -34,7 +42,7 @@ public class CharacteristicPolinomial {
         p = pmap[0][0].getNewO();
     }
 
-    public CharacteristicPolinomial(Polynomial[][] pm, FieldFabric fc){
+    private MatrixCharacteristics(Polynomial[][] pm, FieldFabric fc){
         this.fc = fc;
         dim = pm[0].length;
         pmap = new Polynomial[dim][dim];
@@ -46,7 +54,7 @@ public class CharacteristicPolinomial {
         p = pmap[0][0].getNewO();
     }
 
-    private CharacteristicPolinomial minor(int a, int b){
+    private MatrixCharacteristics minor(int a, int b){
         Polynomial[][] pmap1 = new Polynomial[dim-1][dim-1];
         for(int i = 0; i < dim; i++) {
             for (int j = 0; j < dim; j++) {
@@ -64,7 +72,7 @@ public class CharacteristicPolinomial {
                 }
             }
         }
-        return new CharacteristicPolinomial(pmap1, fc);
+        return new MatrixCharacteristics(pmap1, fc);
     }
 
     public Polynomial characteristic(){
@@ -79,7 +87,20 @@ public class CharacteristicPolinomial {
             else
                 res.dif(res.copy(),g);
         }
+        this.p = res;
         return res;
+    }
+
+    public List<Field> eigenvalues(){
+        return characteristic().roots();
+    }
+
+    public Vector eigenvector(Field eigenvalue){
+        Matrix m1 = new Matrix(dim, fc);
+        m1.e();
+        m1.scalarMul(eigenvalue, m1);
+        m1.dif(m, m1);
+        return m1.homogeneousLinearEquationSolution();
     }
 
     public int getDim() {
@@ -88,6 +109,18 @@ public class CharacteristicPolinomial {
 
     public Polynomial[][] getPmap() {
         return pmap;
+    }
+
+    public Polynomial getP() {
+        return p;
+    }
+
+    public Matrix getM() {
+        return m;
+    }
+
+    public FieldEnum getType(){
+        return fc.getType();
     }
 
     public String toString() {

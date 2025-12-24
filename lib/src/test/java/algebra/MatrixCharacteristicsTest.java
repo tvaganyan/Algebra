@@ -4,15 +4,17 @@ import algebra.fields.Field;
 import algebra.fields.FieldEnum;
 import algebra.fields.FieldFabric;
 import algebra.linear.Matrix;
-import algebra.polynomial.CharacteristicPolinomial;
+import algebra.linear.Vector;
+import algebra.polynomial.MatrixCharacteristics;
 import algebra.polynomial.Polynomial;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class CharacteristicPolinomialTest {
+public class MatrixCharacteristicsTest {
     FieldFabric fc = new FieldFabric(0, FieldEnum.REAL);
     Matrix matrix;
     void init(){
@@ -30,9 +32,13 @@ public class CharacteristicPolinomialTest {
     }
 
     @Test
-    public void matrixCharacteristicReal(){
+    public void matrixCharacteristicsReal(){
         init();
-        CharacteristicPolinomial cp = new CharacteristicPolinomial(matrix, fc);
+        Vector v;
+        Vector v1;
+        Vector v2 = new Vector(3, fc);
+
+        MatrixCharacteristics cp = new MatrixCharacteristics(matrix, fc);
         Polynomial p = cp.characteristic();
         Map<Integer, Field> map = new TreeMap<>();
         map.put(0,fc.Real(-40));
@@ -40,5 +46,25 @@ public class CharacteristicPolinomialTest {
         map.put(2,fc.Real(3));
         map.put(3,fc.Real(-1));
         Assert.assertTrue(p.eq(new Polynomial(map, fc)));
+
+        List<Field> ev = cp.eigenvalues();
+        Assert.assertTrue(ev.get(0).eq(fc.Real(5)));
+        Assert.assertTrue(ev.get(1).eq(fc.Real(2)));
+        Assert.assertTrue(ev.get(2).eq(fc.Real(-4)));
+
+        v1 = cp.eigenvector(ev.get(0));
+        v2.matrixMul(matrix, v1);
+        v1.scalarMul(ev.get(0), v1);
+        Assert.assertTrue(v1.eq(v2));
+
+        v1 = cp.eigenvector(ev.get(1));
+        v2.matrixMul(matrix, v1);
+        v1.scalarMul(ev.get(1), v1);
+        Assert.assertTrue(v1.eq(v2));
+
+        v1 = cp.eigenvector(ev.get(2));
+        v2.matrixMul(matrix, v1);
+        v1.scalarMul(ev.get(2), v1);
+        Assert.assertTrue(v1.eq(v2));
     }
 }

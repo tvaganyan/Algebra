@@ -1,6 +1,7 @@
 package algebra.linear;
 
 import algebra.fields.Field;
+import algebra.fields.FieldEnum;
 import algebra.fields.FieldFabric;
 
 public class Matrix {
@@ -10,12 +11,26 @@ public class Matrix {
 
 
     public Matrix(Field[][] m, FieldFabric fc) {
+        if(m[0][0].getType() != fc.getType())
+            return;
+
         this.fc = fc;
         dim = m[0].length;
         this.m = new Field[dim][dim];
         for(int i = 0; i < dim; i++){
             for(int j = 0; j < dim; j++) {
                 this.m[i][j] = m[i][j].copy();
+            }
+        }
+    }
+
+    public Matrix(int dim, FieldFabric fc) {
+        this.fc = fc;
+        this.dim = dim;
+        m = new Field[dim][dim];
+        for(int i = 0; i < dim; i++){
+            for(int j = 0; j < dim; j++) {
+                m[i][j] = fc.get0();
             }
         }
     }
@@ -79,10 +94,10 @@ public class Matrix {
         }
     }
 
-    public void scalarMul(Field s){
+    public void scalarMul(Field s, Matrix x){
         for(int i = 0; i < dim; i++) {
             for (int j = 0; j < dim; j++) {
-                m[i][j].mul(s, m[i][j]);
+                m[i][j].mul(s, x.m[i][j]);
             }
         }
     }
@@ -161,6 +176,9 @@ public class Matrix {
     }
 
     public boolean eq(Matrix x){
+        if(dim != x.dim)
+            return false;
+
         for(int i = 0; i < dim; i++){
             for(int j = 0; j < dim; j++) {
                 if (!m[i][j].eq(x.m[i][j]))
@@ -176,6 +194,10 @@ public class Matrix {
 
     public Field[][] getM() {
         return m;
+    }
+
+    public FieldEnum getType(){
+        return fc.getType();
     }
 
 

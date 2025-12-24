@@ -28,13 +28,17 @@ public class FieldTest {
         Field x = fc.Complex(1,3);
         Field y = fc.Complex(2,5);
         Field r = fc.Complex(0,0);
-        
+
         r.sum(x,y);
         Assert.assertTrue(r.eq(fc.Complex(3,8)));
         r.dif(x,y);
         Assert.assertTrue(r.eq(fc.Complex(-1,-2)));
         r.mul(x,y);
         Assert.assertTrue(r.eq(fc.Complex(-13,11)));
+        ((ComplexField)r).conjugate(x);
+        Assert.assertTrue(r.eq(fc.Complex(1,-3)));
+        System.out.println(r);
+
     }
 
     @Test public void ZpOp(){

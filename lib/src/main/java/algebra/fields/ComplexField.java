@@ -46,6 +46,10 @@ public class ComplexField implements Field{
         el =  ((ComplexField)x).el.divide(((ComplexField)y).el);
     }
 
+    public void conjugate(Field x){
+        el = ((ComplexField)x).el.conjugate();
+    }
+
     @Override
     public void deg(Field x, int n) {
         Complex c = ((ComplexField)x).el;

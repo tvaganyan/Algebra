@@ -12,6 +12,9 @@ public class Vector {
     private FieldFabric fc;
 
     public Vector(Field[] v, FieldFabric fc) {
+        if(v[0].getType() != fc.getType())
+            return;
+
         this.fc = fc;
         dim = v.length;
         this.v = new Field[dim];
@@ -20,7 +23,16 @@ public class Vector {
         }
     }
 
-    public void o(){
+    public Vector(int dim, FieldFabric fc) {
+        this.fc = fc;
+        this.dim = dim;
+        v = new Field[dim];
+        for(int i = 0; i < dim; i++){
+            v[i] = fc.get0();
+        }
+    }
+
+        public void o(){
         for(Field x: v){
             x.o();
         }
@@ -47,9 +59,9 @@ public class Vector {
         }
     }
 
-    public void scalarMul(Field s){
+    public void scalarMul(Field s, Vector x){
         for(int i = 0; i < dim; i++){
-            v[i].mul(s, v[i]);
+            v[i].mul(s, x.v[i]);
         }
     }
 
@@ -65,6 +77,9 @@ public class Vector {
     }
 
     public boolean eq(Vector x){
+        if(dim != x.dim)
+            return false;
+
         for(int i = 0; i < dim; i++){
             if(!v[i].eq(x.v[i]))
                 return false;
@@ -106,6 +121,10 @@ public class Vector {
 
     public void setV(Field[] v) {
         this.v = v;
+    }
+
+    public FieldEnum getType(){
+        return fc.getType();
     }
 
     @Override

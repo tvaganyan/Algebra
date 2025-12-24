@@ -13,8 +13,18 @@ public class Polynomial {
         this.fc = fc;
         this.map = new TreeMap<>();
         for(int i :map.keySet()) {
+            if(map.get(i).getType() != fc.getType()){
+                this.map = null;
+                return;
+            }
             this.map.put(i, map.get(i).copy());
         }
+    }
+
+    public Polynomial(FieldFabric fc){
+        this.fc = fc;
+        this.map = new TreeMap<>();
+        o();
     }
 
     public int deg(){
@@ -122,8 +132,8 @@ public class Polynomial {
         return true;
     }
 
+    //  the degree of the polynomial must be equal to 1, 2 or 3
     public List<Field> roots(){
-        //  the degree of the polynomial must be equal to 1, 2 or 3
         int d = deg();
         if(d < 1 || d > 3)
             return null;
@@ -177,7 +187,7 @@ public class Polynomial {
         }
 
         if(d == 3){
-            Complex z = Complex.ZERO, a = Complex.ZERO;
+            Complex z = Complex.ZERO, a = Complex.ZERO, b = Complex.ZERO;
             if(fc.getType() == FieldEnum.REAL){
                 double a3 = ((Real)map.get(3)).getEl();
                 double a2 = ((Real)map.get(2)).getEl();
@@ -187,6 +197,7 @@ public class Polynomial {
                 double q = -a0/a3+a2*a1/(3*a3*a3)-2*a2*a2*a2/(27*a3*a3*a3);
                 a = (new Complex(p)).sqrt();
                 z = new Complex(q/2).divide(a.pow(3));
+                b = new Complex(a2 / a3 / 3);
             }
             if(fc.getType() == FieldEnum.COMPLEX){
                 Complex a3 = ((ComplexField)map.get(3)).getEl();
@@ -201,12 +212,13 @@ public class Polynomial {
                                 .divide(a3.multiply(a3).multiply(a3).multiply(27)));
                 a = p.sqrt();
                 z = q.divide(a.pow(3).multiply(2));
+                b = a2.divide(a3).divide(3);
             }
             Complex r = z.multiply(z).subtract(1).sqrt().add(z).log().divide(3);
             Complex fi = new Complex(0,2*Math.PI/3);
-            Complex z1 = r.cosh().multiply(a).multiply(2);
-            Complex z2 = r.add(fi).cosh().multiply(a).multiply(2);
-            Complex z3 = r.add(fi.multiply(2)).cosh().multiply(a).multiply(2);
+            Complex z1 = r.cosh().multiply(a).multiply(2).subtract(b);
+            Complex z2 = r.add(fi).cosh().multiply(a).multiply(2).subtract(b);
+            Complex z3 = r.add(fi.multiply(2)).cosh().multiply(a).multiply(2).subtract(b);
             if(Math.abs(z1.getImaginary()) < 1e-9 && Math.abs(z2.getImaginary()) < 1e-9 && Math.abs(z3.getImaginary()) < 1e-9){
                 res.add(fc.Real(z1.getReal()));
                 res.add(fc.Real(z2.getReal()));
@@ -229,6 +241,10 @@ public class Polynomial {
 
     public Polynomial copy(){
         return new Polynomial(map, fc);
+    }
+
+    public FieldEnum getType(){
+        return fc.getType();
     }
 
     public String toString(){

@@ -102,17 +102,17 @@ public class PolinomialTest {
         Assert.assertTrue(roots.get(1).eq(fc.Real(2)));
         Assert.assertTrue(roots.get(2).eq(fc.Real(-5)));
 
-        fc = new FieldFabric(0,FieldEnum.COMPLEX);
+        FieldFabric fcc = new FieldFabric(0,FieldEnum.COMPLEX);
 
-        map2.put(0, fc.Complex(-1,47));
-        map2.put(1, fc.Complex(-12,-23));
-        map2.put(2, fc.Complex(0,0));
-        map2.put(3, fc.Complex(1,0));
+        map2.put(0, fcc.Complex(-48,36));
+        map2.put(1, fcc.Complex(21,15));
+        map2.put(2, fcc.Complex(12,9));
+        map2.put(3, fcc.Complex(3,0));
 
-        plm = new Polynomial(map2, fc);
+        plm = new Polynomial(map2, fcc);
         roots = plm.roots();
-        Assert.assertTrue(roots.get(0).eq(fc.Complex(3,2)));
-        Assert.assertTrue(roots.get(1).eq(fc.Complex(2,1)));
-        Assert.assertTrue(roots.get(2).eq(fc.Complex(-5,-3)));
+        Assert.assertTrue(roots.get(0).eq(fcc.Complex(-2,2)));
+        Assert.assertTrue(roots.get(1).eq(fcc.Complex(1,-1)));
+        Assert.assertTrue(roots.get(2).eq(fcc.Complex(-3,-4)));
     }
 }
