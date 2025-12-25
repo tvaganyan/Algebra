@@ -24,21 +24,27 @@ public class FieldTest {
 
     @Test public void complexOp(){
         fc = new FieldFabric(0, FieldEnum.COMPLEX);
+        FieldFabric fcr = new FieldFabric(0, FieldEnum.REAL);
         
         Field x = fc.Complex(1,3);
         Field y = fc.Complex(2,5);
-        Field r = fc.Complex(0,0);
+        Field z = fcr.Real(3);
+        Field r = fc.get0();
 
         r.sum(x,y);
         Assert.assertTrue(r.eq(fc.Complex(3,8)));
+        r.sum(x,z);
+        Assert.assertTrue(r.eq(fc.Complex(4,3)));
         r.dif(x,y);
         Assert.assertTrue(r.eq(fc.Complex(-1,-2)));
+        r.dif(x,z);
+        Assert.assertTrue(r.eq(fc.Complex(-2,3)));
         r.mul(x,y);
         Assert.assertTrue(r.eq(fc.Complex(-13,11)));
+        r.mul(x,z);
+        Assert.assertTrue(r.eq(fc.Complex(3,9)));
         ((ComplexField)r).conjugate(x);
         Assert.assertTrue(r.eq(fc.Complex(1,-3)));
-        System.out.println(r);
-
     }
 
     @Test public void ZpOp(){
