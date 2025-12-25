@@ -15,8 +15,8 @@ public class JordanAlgebra {
     private Matrix m;
     private FieldFabric fc;
 
-    public boolean isHermitian(Matrix matrix){
-        Field[][] fm = matrix.getM();
+    public boolean isHermitian(){
+        Field[][] fm = m.getM();
         if(fc.getType() == FieldEnum.REAL){
             for(int i = 0; i < dim; i++){
                 for(int j = i; j < dim; j++){
@@ -40,14 +40,11 @@ public class JordanAlgebra {
 
     public JordanAlgebra(Matrix m, FieldFabric fc) {
         this.fc = fc;
-
-        if(m.getType() != fc.getType() || !isHermitian(m)) {
-            this.fc = null;
-            return;
-        }
-
         this.m = m;
         dim = m.getDim();
+        if(m.getType() != fc.getType() || !isHermitian()) {
+            this.fc = null;
+        }
     }
 
     public void o(){

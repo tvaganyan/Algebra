@@ -111,7 +111,7 @@ public class Polynomial {
         return res;
     }
 
-    public void removeO(){
+    private void removeO(){
         Iterator<Integer> it = map.keySet().iterator();
         while (it.hasNext()) {
             Integer k = it.next();
@@ -120,6 +120,14 @@ public class Polynomial {
         }
         if(map.keySet().isEmpty())
             map.put(0, fc.get0());
+    }
+
+    private void addO(){
+        int d = deg();
+        for(int i = 0; i <= d; i++){
+            if(map.get(i) == null)
+                map.put(i, fc.get0());
+        }
     }
 
     public boolean eq(Polynomial x){
@@ -160,16 +168,20 @@ public class Polynomial {
         if(d == 2){
             Complex z = null, c = null;
             if(fc.getType() == FieldEnum.REAL){
+                addO();
                 double a2 = ((Real)map.get(2)).getEl();
                 double a = ((Real)map.get(1)).getEl()/a2/2;
                 double b = ((Real)map.get(0)).getEl()/a2;
+                removeO();
                 z = new Complex((a * a - b - 2) / 2);
                 c = new Complex(a);
             }
             if(fc.getType() == FieldEnum.COMPLEX){
+                addO();
                 Complex a2 = ((ComplexField)map.get(2)).getEl();
                 Complex a = ((ComplexField)map.get(1)).getEl().divide(a2).divide(2);
                 Complex b = ((ComplexField)map.get(0)).getEl().divide(a2);
+                removeO();
                 z = a.multiply(a).subtract(b).subtract(2).divide(2);
                 c = a;
             }
@@ -189,27 +201,49 @@ public class Polynomial {
         if(d == 3){
             Complex z = Complex.ZERO, a = Complex.ZERO, b = Complex.ZERO;
             if(fc.getType() == FieldEnum.REAL){
+                addO();
                 double a3 = ((Real)map.get(3)).getEl();
                 double a2 = ((Real)map.get(2)).getEl();
                 double a1 = ((Real)map.get(1)).getEl();
                 double a0 = ((Real)map.get(0)).getEl();
+                removeO();
                 double p = (a2*a2/(3*a3*a3)-a1/a3)/3;
                 double q = -a0/a3+a2*a1/(3*a3*a3)-2*a2*a2*a2/(27*a3*a3*a3);
+                if(Math.abs(p) < 1.e-9){
+                    Complex s = new Complex(q);
+                    s = s.log().divide(3);
+                    Complex pi3 = new Complex(0, 2 * Math.PI / 3);
+                    res.add(fc.Complex(s.exp()));
+                    res.add(fc.Complex(s.add(pi3).exp()));
+                    res.add(fc.Complex(s.add(pi3.multiply(2)).exp()));
+                    return res;
+                }
                 a = (new Complex(p)).sqrt();
                 z = new Complex(q/2).divide(a.pow(3));
                 b = new Complex(a2 / a3 / 3);
             }
             if(fc.getType() == FieldEnum.COMPLEX){
+                addO();
                 Complex a3 = ((ComplexField)map.get(3)).getEl();
                 Complex a2 = ((ComplexField)map.get(2)).getEl();
                 Complex a1 = ((ComplexField)map.get(1)).getEl();
                 Complex a0 = ((ComplexField)map.get(0)).getEl();
+                removeO();
                 Complex p = a2.multiply(a2).divide(a3.multiply(a3).multiply(9))
                         .subtract(a1.divide(a3).divide(3));
                 Complex q = a1.multiply(a2).divide(a3.multiply(a3).multiply(3))
                         .subtract(a0.divide(a3))
                         .subtract(a2.multiply(a2).multiply(a2).multiply(2)
                                 .divide(a3.multiply(a3).multiply(a3).multiply(27)));
+                if(p.abs() < 1e-9){
+                    Complex s = q;
+                    s = s.log().divide(3);
+                    Complex pi3 = new Complex(0, 2 * Math.PI / 3);
+                    res.add(fc.Complex(s.exp()));
+                    res.add(fc.Complex(s.add(pi3).exp()));
+                    res.add(fc.Complex(s.add(pi3.multiply(2)).exp()));
+                    return res;
+                }
                 a = p.sqrt();
                 z = q.divide(a.pow(3).multiply(2));
                 b = a2.divide(a3).divide(3);

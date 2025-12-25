@@ -58,6 +58,7 @@ public class PolinomialTest {
     public void polinomialRootsDeg2(){
         Map<Integer, Field> map1 = new TreeMap<>();
         Map<Integer, Field> map2 = new TreeMap<>();
+        Map<Integer, Field> map3 = new TreeMap<>();
 
         FieldFabric fc = new FieldFabric(0,FieldEnum.REAL);
         List<Field> roots;
@@ -71,22 +72,32 @@ public class PolinomialTest {
         Assert.assertTrue(roots.get(0).eq(fc.Real(7)));
         Assert.assertTrue(roots.get(1).eq(fc.Real(-3)));
 
-        fc = new FieldFabric(0,FieldEnum.COMPLEX);
+        FieldFabric fcc = new FieldFabric(0,FieldEnum.COMPLEX);
 
-        map2.put(0, fc.Complex(5,1));
-        map2.put(1, fc.Complex(-3,-2));
-        map2.put(2, fc.Complex(1,0));
+        map2.put(0, fcc.Complex(5,1));
+        map2.put(1, fcc.Complex(-3,-2));
+        map2.put(2, fcc.Complex(1,0));
 
-        plm = new Polynomial(map2, fc);
+        plm = new Polynomial(map2, fcc);
         roots = plm.roots();
-        Assert.assertTrue(roots.get(0).eq(fc.Complex(2,3)));
-        Assert.assertTrue(roots.get(1).eq(fc.Complex(1,-1)));
+        Assert.assertTrue(roots.get(0).eq(fcc.Complex(2,3)));
+        Assert.assertTrue(roots.get(1).eq(fcc.Complex(1,-1)));
+
+        map3.put(0, fc.Real(1));
+        map3.put(2, fc.Real(1));
+        plm = new Polynomial(map3, fc);
+        roots = plm.roots();
+        Assert.assertTrue(roots.get(0).eq(fcc.Complex(0,-1)));
+        Assert.assertTrue(roots.get(1).eq(fcc.Complex(0,1)));
+
+        System.out.println(roots);
     }
 
     @Test
     public void polinomialRootsDeg3() {
         Map<Integer, Field> map1 = new TreeMap<>();
         Map<Integer, Field> map2 = new TreeMap<>();
+        Map<Integer, Field> map3 = new TreeMap<>();
 
         FieldFabric fc = new FieldFabric(0, FieldEnum.REAL);
         List<Field> roots;
@@ -114,5 +125,14 @@ public class PolinomialTest {
         Assert.assertTrue(roots.get(0).eq(fcc.Complex(-2,2)));
         Assert.assertTrue(roots.get(1).eq(fcc.Complex(1,-1)));
         Assert.assertTrue(roots.get(2).eq(fcc.Complex(-3,-4)));
+
+        map3.put(0, fc.Real(1));
+        map3.put(3, fc.Real(1));
+        plm = new Polynomial(map3, fc);
+        roots = plm.roots();
+        Assert.assertTrue(roots.get(0).eq(fcc.Complex(0.5,Math.sqrt(3) / 2)));
+        Assert.assertTrue(roots.get(1).eq(fcc.Complex(-1,0)));
+        Assert.assertTrue(roots.get(2).eq(fcc.Complex(0.5,- Math.sqrt(3) / 2)));
+        System.out.println(roots);
     }
 }
