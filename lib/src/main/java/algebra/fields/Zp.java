@@ -25,25 +25,29 @@ public class Zp implements Field{
         el = 1;
     }
 
+    private int toZp(Field x){
+        return (int)x.getEl();
+    }
+
     @Override
     public void sum(Field x, Field y) {
-        el = modP(((Zp)x).el + ((Zp)y).el);
+        el = modP(toZp(x) + toZp(y));
     }
 
     @Override
     public void dif(Field x, Field y) {
-        el = modP(((Zp)x).el - ((Zp)y).el);
+        el = modP(toZp(x) - toZp(y));
     }
 
     @Override
     public void mul(Field x, Field y) {
-        el = modP(((Zp)x).el * ((Zp)y).el);
+        el = modP(toZp(x) * toZp(y));
     }
 
     @Override
     public void div(Field x, Field y) {
-        int x1 = ((Zp)x).el;
-        int y1 = ((Zp)y).el;
+        int x1 = toZp(x);
+        int y1 = toZp(y);
         for(int k = 1; k < p; k++){
             if(modP(k * y1) == 1) {
                 el = modP(x1 * k);
@@ -54,7 +58,7 @@ public class Zp implements Field{
 
     @Override
     public void deg(Field x, int n) {
-        int r = ((Zp)x).el;
+        int r = toZp(x);
         for(int i = 0; i < n; i++)
             el *= r;
     }
@@ -78,7 +82,7 @@ public class Zp implements Field{
 
     @Override
     public boolean eq(Field f) {
-        return (el == ((Zp)f).el);
+        return (el == toZp(f));
     }
 
     @Override

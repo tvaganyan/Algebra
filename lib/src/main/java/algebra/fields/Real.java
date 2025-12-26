@@ -18,29 +18,33 @@ public class Real implements Field {
         el = 1;
     }
 
+    private double toDouble(Field x){
+        return (double)x.getEl();
+    }
+
     @Override
     public void sum(Field x, Field y) {
-        el = ((Real)x).el + ((Real)y).el;
+        el = toDouble(x) + toDouble(y);
     }
 
     @Override
     public void dif(Field x, Field y) {
-        el = ((Real)x).el - ((Real)y).el;
+        el = toDouble(x) - toDouble(y);
     }
 
     @Override
     public void mul(Field x, Field y) {
-        el = ((Real)x).el * ((Real)y).el;
+        el = toDouble(x) * toDouble(y);
     }
 
     @Override
     public void div(Field x, Field y) {
-        el = ((Real)x).el / ((Real)y).el;
+        el = toDouble(x) / toDouble(y);
     }
 
     @Override
     public void deg(Field x, int n) {
-        double r = ((Real)x).el;
+        double r = toDouble(x);
         for(int i = 0; i < n; i++)
             el *= r;
     }
@@ -63,7 +67,7 @@ public class Real implements Field {
     @Override
     public boolean eq(Field f) {
         System.out.println();
-        return (Math.abs(el - ((Real)f).el) < 1e-9);
+        return (Math.abs(el - toDouble(f)) < 1e-9);
     }
 
     @Override

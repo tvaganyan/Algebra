@@ -26,65 +26,41 @@ public class ComplexField implements Field{
         el = Complex.ONE;
     }
 
+    private Complex toComplex(Field x){
+        if(x.getType() == FieldEnum.COMPLEX)
+            return (Complex) x.getEl();
+        return new Complex((double) x.getEl());
+    }
+
     @Override
     public void sum(Field x, Field y) {
-        Field cx = x.copy();
-        Field cy = y.copy();
-        if(x.getType() == FieldEnum.REAL)
-            cx = new ComplexField((Double) x.getEl());
-        if(y.getType() == FieldEnum.REAL)
-            cy = new ComplexField((Double) y.getEl());
-        el =  ((ComplexField)cx).el.add(((ComplexField)cy).el);
+        el =  toComplex(x).add(toComplex(y));
     }
 
     @Override
     public void dif(Field x, Field y) {
-        Field cx = x.copy();
-        Field cy = y.copy();
-        if(x.getType() == FieldEnum.REAL)
-            cx = new ComplexField((Double) x.getEl());
-        if(y.getType() == FieldEnum.REAL)
-            cy = new ComplexField((Double) y.getEl());
-        el =  ((ComplexField)cx).el.subtract(((ComplexField)cy).el);
+        el = toComplex(x).subtract(toComplex(y));
     }
 
     @Override
     public void mul(Field x, Field y) {
-        Field cx = x.copy();
-        Field cy = y.copy();
-        if(x.getType() == FieldEnum.REAL)
-            cx = new ComplexField((Double) x.getEl());
-        if(y.getType() == FieldEnum.REAL)
-            cy = new ComplexField((Double) y.getEl());
-        el =  ((ComplexField)cx).el.multiply(((ComplexField)cy).el);
+        el = toComplex(x).multiply(toComplex(y));
     }
 
     @Override
     public void div(Field x, Field y) {
-        Field cx = x.copy();
-        Field cy = y.copy();
-        if(x.getType() == FieldEnum.REAL)
-            cx = new ComplexField((Double) x.getEl());
-        if(y.getType() == FieldEnum.REAL)
-            cy = new ComplexField((Double) y.getEl());
-        el =  ((ComplexField)cx).el.divide(((ComplexField)cy).el);
+        el = toComplex(x).divide(toComplex(y));
     }
 
     public void conjugate(Field x){
-        Field cx = x.copy();
-        if(x.getType() == FieldEnum.REAL)
-            cx = new ComplexField((Double) x.getEl());
-        el = ((ComplexField)cx).el.conjugate();
+        el = toComplex(x).conjugate();
     }
 
     @Override
     public void deg(Field x, int n) {
-        Field cx = x.copy();
-        if(x.getType() == FieldEnum.REAL)
-            cx = new ComplexField((Double) x.getEl());
-        Complex c = ((ComplexField)cx).el;
+        Complex cx = toComplex(x);
         for(int i = 0; i < n; i++)
-            el = el.multiply(c);
+            el = el.multiply(cx);
     }
 
     @Override
@@ -104,7 +80,7 @@ public class ComplexField implements Field{
 
     @Override
     public boolean eq(Field f) {
-        return el.subtract(((ComplexField)f).el).abs() < 1e-9;
+        return el.subtract(toComplex(f)).abs() < 1e-9;
     }
 
     @Override
