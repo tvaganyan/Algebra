@@ -13,4 +13,5 @@ public interface Field {
     Field copy();
     boolean eq(Field f);
     FieldEnum getType();
+    Object getEl();
 }

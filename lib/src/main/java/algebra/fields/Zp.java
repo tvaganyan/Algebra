@@ -90,7 +90,8 @@ public class Zp implements Field{
         return p;
     }
 
-    public int getEl() {
+    @Override
+    public Integer getEl() {
         return el;
     }
 
