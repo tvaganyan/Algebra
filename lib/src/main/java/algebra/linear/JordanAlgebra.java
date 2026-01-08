@@ -40,8 +40,8 @@ public class JordanAlgebra {
 
     public JordanAlgebra(Matrix m, FieldFabric fc) {
         this.fc = fc;
-        this.m = m;
         dim = m.getDim();
+        this.m = new Matrix(m.getM(), fc);
         if(m.getType() != fc.getType() || !isHermitian()) {
             this.fc = null;
         }
@@ -78,10 +78,38 @@ public class JordanAlgebra {
     }
 
     public void conjugate(JordanAlgebra x, Matrix y){  // y * x.m * y^-1
-        m.mul(y, x.m);
+        Matrix m1 = new Matrix(dim, fc);
+        m1.mul(x.m, y);
         Matrix y1 = new Matrix(dim, fc);
         y1.inverse(y);
-        m.mul(m, y1);
+        m.mul(y1, m1);
+    }
+
+    public void linearEquationSolution(JordanAlgebra a, JordanAlgebra b){   // a * this = b
+        JordanAlgebra r1 = new JordanAlgebra(new Matrix(dim, fc), fc);
+        JordanAlgebra r2 = new JordanAlgebra(new Matrix(dim, fc), fc);
+        List<Field> ev = a.eigenvalues();
+        Matrix d = a.diagonalizationMatrix();
+        r1.conjugate(b, d);
+        for(int i = 0; i < dim; i++){
+            for(int j = 0; j < dim; j++){
+                if(fc.getType() == FieldEnum.REAL) {
+                    Field f = fc.get0();
+                    f.sum(ev.get(i), ev.get(j));
+                    f.div(fc.Real(2), f);
+                    r2.m.getM()[i][j].mul(r1.m.getM()[i][j], f);
+                }
+                if(fc.getType() == FieldEnum.COMPLEX) {
+                    Field f = fc.get0();
+                    f.sum(ev.get(i), ev.get(j));
+                    f.div(fc.Complex(2), f);
+                    r2.m.getM()[i][j].mul(r1.m.getM()[i][j], f);
+                }
+            }
+        }
+        Matrix di = new Matrix(dim, fc);
+        di.inverse(d);
+        conjugate(r2, di);
     }
 
     public List<Field> eigenvalues(){
@@ -89,14 +117,16 @@ public class JordanAlgebra {
         return mc.eigenvalues();
     }
 
-    private Matrix diagonalizationMatrix(){
+    public Matrix diagonalizationMatrix(){
         MatrixCharacteristics mc = new MatrixCharacteristics(m, fc);
         Matrix res = new Matrix(dim, fc);
         List<Field> ev = mc.eigenvalues();
         for(int i = 0; i < dim; i++) {
-            Vector v = mc.eigenvector(ev.get(0));
+            Vector v = mc.eigenvector(ev.get(i));
             v.norming();
-            res.getM()[i] = v.getV();
+            for(int j = 0; j < dim; j++) {
+                res.getM()[j][i] = v.getV()[j];
+            }
         }
         return res;
     }

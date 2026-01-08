@@ -85,7 +85,7 @@ public class Matrix {
     }
 
     public void inverse(Matrix x){
-        Vector a = new Vector(x.m[0], fc);
+        Vector a = new Vector(dim, fc);
         for(int i = 0; i < dim; i++){
             a.e(i);
             for (int j = 0; j < dim; j++) {

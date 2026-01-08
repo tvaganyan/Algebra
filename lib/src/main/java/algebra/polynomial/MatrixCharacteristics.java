@@ -24,7 +24,7 @@ public class MatrixCharacteristics {
         if(m.getType() != fc.getType())
             return;
 
-        this.m = m;
+        this.m = new Matrix(m.getM(), fc);
         this.fc = fc;
         dim = m.getDim();
         pmap = new Polynomial[dim][dim];
