@@ -36,9 +36,11 @@ public class NormalDistributionTest {
         Assert.assertTrue(fr.norm() < 0.1);
         fr.dif(fc.getN(1), dist.getAverage().getV()[1]);
         Assert.assertTrue(fr.norm() < 0.1);
-        fr.dif(fc.getN(4), dist.getDispersion().getM()[0][1]);
+        fr.dif(fc.getN(2*(4+1)), dist.getNoise().getM()[0][0]);
         Assert.assertTrue(fr.norm() < 0.1);
-        fr.dif(fc.getN(4), dist.getDispersion().getM()[1][1]);
+        fr.dif(fc.getN(2*4), dist.getNoise().getM()[0][1]);
+        Assert.assertTrue(fr.norm() < 0.1);
+        fr.dif(fc.getN(2*4), dist.getNoise().getM()[1][1]);
         Assert.assertTrue(fr.norm() < 0.1);
         JordanAlgebra ds = new JordanAlgebra(dist.getDispersion());
         JordanAlgebra rs = new JordanAlgebra(dist.resistance());
