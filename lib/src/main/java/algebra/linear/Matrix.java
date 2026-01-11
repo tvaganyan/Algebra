@@ -150,6 +150,10 @@ public class Matrix {
         if(!det().isO()){
             return null;
         }
+        if(dim == 1) {
+            Field[] f = {fc.get1()};
+            return new Vector(f, fc);
+        }
 
         Field[] v = new Field[dim];               
         for(int i = 0; i < dim; i++){
@@ -198,6 +202,11 @@ public class Matrix {
 
     public FieldEnum getType(){
         return fc.getType();
+    }
+
+
+    public FieldFabric getFc() {
+        return fc;
     }
 
 

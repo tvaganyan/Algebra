@@ -65,6 +65,15 @@ public class Vector {
         }
     }
 
+    public Field scalarMul(Vector x, Vector y){ // x * conjugate(y)
+        Field res = fc.get0();
+        for(int i = 0; i < dim; i++){
+            Field z = fc.get0();
+            z.mul(x.getV()[i], fc.conjugate(y.getV()[i]));
+        }
+        return res;
+    }
+
     public void matrixMul(Matrix x, Vector y){
         for(int i = 0; i < dim; i++){
             v[i] = fc.get0();
@@ -125,6 +134,10 @@ public class Vector {
 
     public FieldEnum getType(){
         return fc.getType();
+    }
+
+    public FieldFabric getFc() {
+        return fc;
     }
 
     @Override

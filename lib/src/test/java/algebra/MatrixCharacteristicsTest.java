@@ -38,7 +38,7 @@ public class MatrixCharacteristicsTest {
         Vector v1;
         Vector v2 = new Vector(3, fc);
 
-        MatrixCharacteristics cp = new MatrixCharacteristics(matrix, fc);
+        MatrixCharacteristics cp = new MatrixCharacteristics(matrix);
         Polynomial p = cp.characteristic();
         Map<Integer, Field> map = new TreeMap<>();
         map.put(0,fc.Real(-40));

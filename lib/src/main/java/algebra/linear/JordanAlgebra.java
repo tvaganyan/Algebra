@@ -38,8 +38,8 @@ public class JordanAlgebra {
         return true;
     }
 
-    public JordanAlgebra(Matrix m, FieldFabric fc) {
-        this.fc = fc;
+    public JordanAlgebra(Matrix m) {
+        fc = m.getFc();
         dim = m.getDim();
         this.m = new Matrix(m.getM(), fc);
         if(m.getType() != fc.getType() || !isHermitian()) {
@@ -86,8 +86,8 @@ public class JordanAlgebra {
     }
 
     public void linearEquationSolution(JordanAlgebra a, JordanAlgebra b){   // a * this = b
-        JordanAlgebra r1 = new JordanAlgebra(new Matrix(dim, fc), fc);
-        JordanAlgebra r2 = new JordanAlgebra(new Matrix(dim, fc), fc);
+        JordanAlgebra r1 = new JordanAlgebra(new Matrix(dim, fc));
+        JordanAlgebra r2 = new JordanAlgebra(new Matrix(dim, fc));
         List<Field> ev = a.eigenvalues();
         Matrix d = a.diagonalizationMatrix();
         r1.conjugate(b, d);
@@ -113,12 +113,12 @@ public class JordanAlgebra {
     }
 
     public List<Field> eigenvalues(){
-        MatrixCharacteristics mc = new MatrixCharacteristics(m, fc);
+        MatrixCharacteristics mc = new MatrixCharacteristics(m);
         return mc.eigenvalues();
     }
 
     public Matrix diagonalizationMatrix(){
-        MatrixCharacteristics mc = new MatrixCharacteristics(m, fc);
+        MatrixCharacteristics mc = new MatrixCharacteristics(m);
         Matrix res = new Matrix(dim, fc);
         List<Field> ev = mc.eigenvalues();
         for(int i = 0; i < dim; i++) {

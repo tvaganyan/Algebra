@@ -43,6 +43,22 @@ public class FieldFabric {
         return res;
     }
 
+    public Field getN(int n){
+        Field res = null;
+        switch (type){
+            case REAL:
+                res = new Real(n);
+                break;
+            case COMPLEX:
+                res = new ComplexField(n,0);
+                break;
+            case ZP:
+                res = new Zp(p,n);
+                break;
+        }
+        return res;
+    }
+
     public Field getMinus1(){
         Field res = null;
         switch (type){
@@ -57,6 +73,14 @@ public class FieldFabric {
                 break;
         }
         return res;
+    }
+
+    public Field conjugate(Field x){
+        if(x.getType() != FieldEnum.COMPLEX)
+            return x;
+        Field f = new ComplexField(0);
+        ((ComplexField)f).conjugate(x);
+        return f;
     }
 
     public Field Real(double r){

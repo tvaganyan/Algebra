@@ -21,7 +21,7 @@ public class JordanAlgebraTest {
         m1[1][0] = fcc.Complex(2);
         m1[1][1] = fcc.Complex(-2);
 
-        JordanAlgebra a = new JordanAlgebra(new Matrix(m1, fcc), fcc);
+        JordanAlgebra a = new JordanAlgebra(new Matrix(m1, fcc));
 
         Field[][] m2 = new Field[2][2];
         m2[0][0] = fcc.Complex(1);
@@ -29,9 +29,9 @@ public class JordanAlgebraTest {
         m2[1][0] = fcc.Complex(0, 2);
         m2[1][1] = fcc.Complex(-1);
 
-        JordanAlgebra b = new JordanAlgebra(new Matrix(m2, fcc), fcc);
+        JordanAlgebra b = new JordanAlgebra(new Matrix(m2, fcc));
 
-        JordanAlgebra r = new JordanAlgebra(new Matrix(2, fcc), fcc);
+        JordanAlgebra r = new JordanAlgebra(new Matrix(2, fcc));
         Field[][] mr = new Field[2][2];
 
         r.sum(a, b);
@@ -39,21 +39,21 @@ public class JordanAlgebraTest {
         mr[0][1] = fcc.Complex(2, -2);
         mr[1][0] = fcc.Complex(2, 2);
         mr[1][1] = fcc.Complex(-3);
-        Assert.assertTrue(r.eq(new JordanAlgebra(new Matrix(mr, fcc), fcc)));
+        Assert.assertTrue(r.eq(new JordanAlgebra(new Matrix(mr, fcc))));
 
         r.dif(a, b);
         mr[0][0] = fcc.Complex(0);
         mr[0][1] = fcc.Complex(2, 2);
         mr[1][0] = fcc.Complex(2, -2);
         mr[1][1] = fcc.Complex(-1);
-        Assert.assertTrue(r.eq(new JordanAlgebra(new Matrix(mr, fcc), fcc)));
+        Assert.assertTrue(r.eq(new JordanAlgebra(new Matrix(mr, fcc))));
 
         r.mul(a, b);
         mr[0][0] = fcc.Complex(1);
         mr[0][1] = fcc.Complex(0, 1);
         mr[1][0] = fcc.Complex(0, -1);
         mr[1][1] = fcc.Complex(2);
-        Assert.assertTrue(r.eq(new JordanAlgebra(new Matrix(mr, fcc), fcc)));
+        Assert.assertTrue(r.eq(new JordanAlgebra(new Matrix(mr, fcc))));
 
         List<Field> ev = b.eigenvalues();
         Assert.assertTrue(fcc.Complex(Math.sqrt(5)).eq(ev.get(0)));
@@ -67,16 +67,16 @@ public class JordanAlgebraTest {
         mr[0][1] = fcc.Complex(0);
         mr[1][0] = fcc.Complex(0);
         mr[1][1] = fcc.Complex(-Math.sqrt(5));
-        Assert.assertTrue(r.eq(new JordanAlgebra(new Matrix(mr, fcc), fcc)));
+        Assert.assertTrue(r.eq(new JordanAlgebra(new Matrix(mr, fcc))));
 
         r.linearEquationSolution(a, b);
         mr[0][0] = fcc.Complex(-1);
         mr[0][1] = fcc.Complex(1, 4);
         mr[1][0] = fcc.Complex(1, -4);
         mr[1][1] = fcc.Complex(1.5);
-        Assert.assertTrue(r.eq(new JordanAlgebra(new Matrix(mr, fcc), fcc)));
+        Assert.assertTrue(r.eq(new JordanAlgebra(new Matrix(mr, fcc))));
 
-        JordanAlgebra x = new JordanAlgebra(new Matrix(2, fcc), fcc);
+        JordanAlgebra x = new JordanAlgebra(new Matrix(2, fcc));
 
         x.mul(a, r);
         Assert.assertTrue(x.eq(b));

@@ -281,6 +281,10 @@ public class Polynomial {
         return fc.getType();
     }
 
+    public FieldFabric getFc() {
+        return fc;
+    }
+
     public String toString(){
         return map.toString();
     }

@@ -20,15 +20,12 @@ public class MatrixCharacteristics {
 
     FieldFabric fc;
 
-    public MatrixCharacteristics(Matrix m, FieldFabric fc){
-        if(m.getType() != fc.getType())
-            return;
-
+    public MatrixCharacteristics(Matrix m){
+        fc = m.getFc();
         this.m = new Matrix(m.getM(), fc);
-        this.fc = fc;
         dim = m.getDim();
         pmap = new Polynomial[dim][dim];
-        Field me = this.fc.getMinus1();
+        Field me = fc.getMinus1();
         for(int i = 0; i < dim; i++){
             for(int j = 0; j < dim; j++){
                 Map<Integer, Field> map = new TreeMap<>();
@@ -42,8 +39,7 @@ public class MatrixCharacteristics {
         p = pmap[0][0].getNewO();
     }
 
-    private MatrixCharacteristics(Polynomial[][] pm, FieldFabric fc){
-        this.fc = fc;
+    private MatrixCharacteristics(Polynomial[][] pm){
         dim = pm[0].length;
         pmap = new Polynomial[dim][dim];
         for(int i = 0; i < dim; i++){
@@ -72,7 +68,7 @@ public class MatrixCharacteristics {
                 }
             }
         }
-        return new MatrixCharacteristics(pmap1, fc);
+        return new MatrixCharacteristics(pmap1);
     }
 
     public Polynomial characteristic(){
