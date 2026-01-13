@@ -89,8 +89,6 @@ public class PolinomialTest {
         roots = plm.roots();
         Assert.assertTrue(roots.get(0).eq(fcc.Complex(0,-1)));
         Assert.assertTrue(roots.get(1).eq(fcc.Complex(0,1)));
-
-        System.out.println(roots);
     }
 
     @Test
@@ -133,6 +131,5 @@ public class PolinomialTest {
         Assert.assertTrue(roots.get(0).eq(fcc.Complex(0.5,Math.sqrt(3) / 2)));
         Assert.assertTrue(roots.get(1).eq(fcc.Complex(-1,0)));
         Assert.assertTrue(roots.get(2).eq(fcc.Complex(0.5,- Math.sqrt(3) / 2)));
-        System.out.println(roots);
     }
 }
