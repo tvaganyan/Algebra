@@ -22,4 +22,20 @@ public class PoissonDistribution {
         }
         return Math.pow(average, n) * Math.exp(-average) / nf;
     }
+
+    public static double probability(int n, double mean){
+        int nf = 1;
+        for(int j = 1; j <= n; j++) {
+            nf *= j;
+        }
+        return Math.pow(mean, n) * Math.exp(-mean) / nf;
+    }
+
+    public List<Integer> getSequence() {
+        return sequence;
+    }
+
+    public double getAverage() {
+        return average;
+    }
 }
