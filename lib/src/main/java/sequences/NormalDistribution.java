@@ -68,9 +68,8 @@ public class NormalDistribution {
         Vector z = new Vector(dim, fc);
         y.dif(x, average);
         z.matrixMul(dispersionInv, y);
-        Vector r = new Vector(dim, fc);
-        r.scalarMul(y, z);
-        return Math.exp(-r.norm() / 2);
+        Field r = (new Vector(dim, fc)).scalarMul(y, z);
+        return Math.exp(- r.norm() / 2) * Math.sqrt(dispersion.det().norm()) / Math.pow(2 * Math.PI, dim * 0.5);
     }
 
     public Matrix resistance(){
