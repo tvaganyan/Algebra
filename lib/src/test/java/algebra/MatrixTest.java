@@ -90,5 +90,9 @@ public class MatrixTest {
         Vector c = new Vector(v3, fc);
 
         Assert.assertTrue(y.eq(c));
+
+        c.norming();
+        Field f = c.scalarMul(c,c);
+        Assert.assertTrue(f.eq(fc.get1()));
     }
 }

@@ -66,10 +66,11 @@ public class Vector {
     }
 
     public Field scalarMul(Vector x, Vector y){ // x * conjugate(y)
-        Field res = fc.get0();
+       Field res = fc.get0();
         for(int i = 0; i < dim; i++){
             Field z = fc.get0();
             z.mul(x.getV()[i], fc.conjugate(y.getV()[i]));
+            res.sum(res, z);
         }
         return res;
     }
