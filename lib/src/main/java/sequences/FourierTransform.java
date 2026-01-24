@@ -1,28 +1,24 @@
 package sequences;
 
-import algebra.fields.Field;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class FourierTransform {
     private List<Double> sequence;
-    private List<Double> sequenceF;
     private int size;
-    private int k = 30;
-    private double[] c = new double[k];
-    private double[] s = new double[k];
+    private int terms;
+    private double[] c;
+    private double[] s;
 
-    public FourierTransform(List<Double> sequence){
+    public FourierTransform(List<Double> sequence, int terms){
+        this.terms = terms;
         this.sequence = sequence;
         size = sequence.size();
-        for(int i = 0; i < k; i++){
+        c = new double[terms];
+        s = new double[terms];
+        for(int i = 0; i < terms; i++){
             c[i] = 2 * cos(i);
             s[i] = 2 * sin(i);
-        }
-        this.sequenceF = new ArrayList<>();
-        for(int j = 0; j < size; j++){
-            sequenceF.add(f(j));
         }
     }
 
@@ -48,15 +44,32 @@ public class FourierTransform {
 
     public double f(int x){
        double res = 0;
-       for(int i = 0; i < k; i++){
+       for(int i = 0; i < terms; i++){
            res += c[i] * Math.cos(2 * i * Math.PI * x / size) + s[i] * Math.sin(2 * i * Math.PI * x / size);
        }
        return res;
     }
 
+    public double f(int x, int terms){
+        double res = 0;
+        for(int i = 0; i < terms; i++){
+            res += c[i] * Math.cos(2 * i * Math.PI * x / size) + s[i] * Math.sin(2 * i * Math.PI * x / size);
+        }
+        return res;
+    }
+
     public double df(int x){
         double res = 0;
-        for(int i = 1; i < k; i++){
+        for(int i = 1; i < terms; i++){
+            res += 2 * i * Math.PI / size *
+                    (s[i] * Math.cos(2 * i * Math.PI * x / size) - c[i] * Math.sin(2 * i * Math.PI * x / size));
+        }
+        return res;
+    }
+
+    public double df(int x, int terms){
+        double res = 0;
+        for(int i = 1; i < terms; i++){
             res += 2 * i * Math.PI / size *
                     (s[i] * Math.cos(2 * i * Math.PI * x / size) - c[i] * Math.sin(2 * i * Math.PI * x / size));
         }
@@ -68,7 +81,7 @@ public class FourierTransform {
     }
 
     public int getK() {
-        return k;
+        return terms;
     }
 
     public double[] getC() {
@@ -84,6 +97,33 @@ public class FourierTransform {
     }
 
     public List<Double> getSequenceF() {
+        List<Double> sequenceF = new ArrayList<>();
+        for(int j = 0; j < size; j++){
+            sequenceF.add(f(j, terms));
+        }
         return sequenceF;
+    }
+
+    public List<Double> getSequenceF(int terms) {
+        List<Double> sequenceF = new ArrayList<>();
+        for(int j = 0; j < size; j++){
+            sequenceF.add(f(j, terms));
+        }
+        return sequenceF;
+    }
+
+    public List<Double> getSequenceDF() {
+        List<Double> sequenceDF = new ArrayList<>();
+        for(int j = 0; j < size; j++){
+            sequenceDF.add(df(j, terms));
+        }
+        return sequenceDF;
+    }
+    public List<Double> getSequenceDF(int terms) {
+        List<Double> sequenceDF = new ArrayList<>();
+        for(int j = 0; j < size; j++){
+            sequenceDF.add(df(j, terms));
+        }
+        return sequenceDF;
     }
 }

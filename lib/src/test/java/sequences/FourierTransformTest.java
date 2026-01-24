@@ -17,7 +17,7 @@ public class FourierTransformTest {
             else
                 list.add(0.0);
         }
-        FourierTransform ft = new FourierTransform(list);
+        FourierTransform ft = new FourierTransform(list, 100);
         for(int i = 1; i < ft.getK(); i++) {
             if(i % 2 == 1)
                 Assert.assertTrue(Math.abs(ft.getS()[i] * i / 0.63662 - 1) < 1e-3);
@@ -27,7 +27,7 @@ public class FourierTransformTest {
            Assert.assertTrue(Math.abs(ft.getC()[i]) < 1e-3);
         }
 
-        Assert.assertTrue(Math.abs(ft.f(size / 4) - 1) < 2e-2);
-        Assert.assertTrue(Math.abs(ft.f((size * 3) / 4)) < 2e-2);
+        Assert.assertTrue(Math.abs(ft.f(size / 4) - 1) < 1e-2);
+        Assert.assertTrue(Math.abs(ft.f((size * 3) / 4)) < 1e-2);
     }
 }

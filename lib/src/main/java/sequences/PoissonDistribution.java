@@ -16,7 +16,7 @@ public class PoissonDistribution {
     }
 
     public double probability(int n){
-        int nf = 1;
+        double nf = 1;
         for(int j = 1; j <= n; j++) {
             nf *= j;
         }
@@ -24,7 +24,7 @@ public class PoissonDistribution {
     }
 
     public static double probability(int n, double mean){
-        int nf = 1;
+        double nf = 1;
         for(int j = 1; j <= n; j++) {
             nf *= j;
         }
