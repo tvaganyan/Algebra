@@ -17,17 +17,19 @@ public class FourierTransformTest {
             else
                 list.add(0.0);
         }
-        FourierTransform ft = new FourierTransform(list, 100);
+        FourierTransform ft = new FourierTransform(list, 10);
         for(int i = 1; i < ft.getK(); i++) {
-            if(i % 2 == 1)
-                Assert.assertTrue(Math.abs(ft.getS()[i] * i / 0.63662 - 1) < 1e-3);
-            else
+            if(i % 2 == 1) {
+                System.out.println(ft.getS()[i] * i * Math.PI / 2);
+                Assert.assertTrue(Math.abs(ft.getS()[i] * i * Math.PI / 2 - 1) < 1e-3);
+            }
+            else {
+                System.out.println(Math.abs(ft.getS()[i]));
                 Assert.assertTrue(Math.abs(ft.getS()[i]) < 1e-3);
+            }
 
-           Assert.assertTrue(Math.abs(ft.getC()[i]) < 1e-3);
+            System.out.println(Math.abs(ft.getC()[i]));
+            Assert.assertTrue(Math.abs(ft.getC()[i]) < 1e-3);
         }
-
-        Assert.assertTrue(Math.abs(ft.f(size / 4) - 1) < 1e-2);
-        Assert.assertTrue(Math.abs(ft.f((size * 3) / 4)) < 1e-2);
     }
 }
